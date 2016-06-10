@@ -1,0 +1,9 @@
+{% extends "base.twig" %}
+
+{% block title %}{{ user.login }}{% endblock %}
+
+{%  block content %}
+    <div class="row">
+        <h2>Bienvenue {{ user.prenom }} {{ user.nom }} !</h2>
+    </div>
+{% endblock %}

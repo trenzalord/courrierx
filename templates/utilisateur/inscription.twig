@@ -1,0 +1,30 @@
+{% extends "base.twig" %}
+
+{% block title %}Inscription{% endblock %}
+
+{%  block content %}
+    <div class="row">
+        <form action="" method="post">
+            <h2>Inscription</h2>
+            {% if error %}
+                <div class="alert alert-danger" role="alert">{{ error }}</div>
+            {% endif %}
+            <label for="inputLogin" class="sr-only">Nom d'utilisateur</label>
+            <input name="login" type="text" maxlength="255" id="inputLogin" class="form-control" placeholder="Trenzaloard" required autofocus>
+            <label for="inputPassword1" class="sr-only">Mot de passe</label>
+            <input name="password1" maxlength="255" minlength="8" type="password" id="inputPassword1" class="form-control" placeholder="******" required>
+            <label for="inputPassword2" class="sr-only">retapez le mot de passe</label>
+            <input name="password2" maxlength="255" minlength="8" type="password" id="inputPassword2" class="form-control" placeholder="******" required>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Inscription</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script type="text/javascript">
+        $('#inputLogin').blur(function (){
+            console.log('blur');
+        });
+
+    </script>
+{% endblock %}
