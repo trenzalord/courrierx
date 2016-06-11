@@ -12,15 +12,15 @@ use Zend\Authentication\Result;
 
 class UserAction{
     /* @var $ci ContainerInterface */
-    protected $ci;
+    protected $coi;
 
-    public function __construct(ContainerInterface $ci) {
-        $this->ci = $ci;
+    public function __construct(ContainerInterface $coi) {
+        $this->coi = $coi;
     }
 
-    public function connexion(\Slim\Http\Request $request, \Slim\Http\Response $response, $args){
-        $authenticator = $this->ci->get('authenticator');
-        $view = $this->ci->get('view');
+    public function connexion(\Slim\Http\Request $request, \Slim\Http\Response $response){
+        $authenticator = $this->coi->get('authenticator');
+        $view = $this->coi->get('view');
         if(!$authenticator->hasIdentity()) {
             if ($request->isPost()) {
                 $params = $request->getParsedBody();
@@ -31,27 +31,27 @@ class UserAction{
 
                 if ($result->isValid()) {
                     return $response->withRedirect('/');
-                } else {
-                    return $view->render($response, "utilisateur/connexion.twig", ['error' => 'Identifiants incorrects']);
                 }
+
+                return $view->render($response, "utilisateur/connexion.twig", ['error' => 'Identifiants incorrects']);
             }
 
             return $view->render($response, "utilisateur/connexion.twig");
-        }else{
-            return $response->withRedirect('/');
         }
+
+        return $response->withRedirect('/');
     }
 
     public function deconnexion(\Slim\Http\Request $request, \Slim\Http\Response $response){
-        $this->ci->get('authenticator')->logout();
+        $this->coi->get('authenticator')->logout();
         return $response->withRedirect('/');
     }
 
     public function profil(\Slim\Http\Request $request, \Slim\Http\Response $response){
-        return $this->ci->get('view')->render($response, "utilisateur/profil.twig");
+        return $this->coi->get('view')->render($response, "utilisateur/profil.twig");
     }
 
     public function inscription(\Slim\Http\Request $request, \Slim\Http\Response $response){
-        return $this->ci->get('view')->render($response, "utilisateur/inscription.twig");
+        return $this->coi->get('view')->render($response, "utilisateur/inscription.twig");
     }
 }
