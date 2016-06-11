@@ -4,7 +4,21 @@
 
 {%  block content %}
     <div class="row">
-        <div class="jumbotron"><h2>Courrierx</h2></div>
-        <p>Un super site en construction</p>
+        <div class="jumbotron">
+            <h2>Courrierx</h2>
+            <p>Un super site en construction</p>
+        </div>
+    </div>
+    <div class="row">
+        {% if user.login %}
+            <h2>Connecté en tant que {{ user.prenom }} {{ user.nom }}</h2>
+        {% endif %}
+        <h2>Lien actuels</h2>
+        <div class="list-group">
+            <a href="{{ path_for('login') }}" class="list-group-item">Connexion</a>
+            <a href="{{ path_for('logout') }}" class="list-group-item">Déconnexion</a>
+            <a href="{{ path_for('profile') }}" class="list-group-item">Profil</a>
+            <a href="{{ path_for('register') }}" class="list-group-item list-group-item-warning">Inscription - En construction</a>
+        </div>
     </div>
 {% endblock %}
