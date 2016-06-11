@@ -16,4 +16,10 @@ class UserRepo{
             'email' => $user->getEmail()
         ]);
     }
+
+    public static function checkExistingLogin($login){
+        $req = StaticRepo::getConnexion()->prepare("SELECT login FROM user WHERE login = :login");
+        $req->execute(['login' => $login]);
+        return $req->fetch() !== false;
+    }
 }

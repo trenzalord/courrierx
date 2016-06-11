@@ -11,4 +11,5 @@ $app->group('/utilisateur', function (){
     $this->get('/deconnexion', '\API\V1\Action\UserAction:deconnexion')->setName('logout');
     $this->get('/profil', '\API\V1\Action\UserAction:profil')->setName('profile');
     $this->map(['GET', 'POST'], '/inscription', '\API\V1\Action\UserAction:inscription')->setName('register');
+    $this->post('/checkLogin', '\API\V1\Action\UserAction:checkLogin')->setName('checkLogin');
 });

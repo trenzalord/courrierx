@@ -105,4 +105,13 @@ class UserAction{
 
         return $this->view->render($res, "utilisateur/inscription.twig", $variables);
     }
+
+    public function checkLogin(Request $req, Response $res){
+        if($req->isXhr()) {
+            $login = $req->getParsedBody()['login'];
+            $exist = UserRepo::checkExistingLogin($login);
+            return $res->withJson(json_encode(["login" => $login, "exist" => $exist]));
+        }
+        return $res->withRedirect('/');
+    }
 }

@@ -33,6 +33,7 @@ class CourrierxAcl extends ZendAcl{
         $this->addResource('/utilisateur/deconnexion');
         $this->addResource('/utilisateur/profil');
         $this->addResource('/utilisateur/inscription');
+        $this->addResource('/utilisateur/checkLogin');
 
         // APPLICATION PERMISSIONS
         // Now we allow or deny a role's access to resources. The third argument
@@ -44,6 +45,7 @@ class CourrierxAcl extends ZendAcl{
         $this->allow('guest', '/utilisateur/connexion', ['GET', 'POST']);
         $this->allow('guest', '/utilisateur/deconnexion', 'GET');
         $this->allow('guest', '/utilisateur/inscription', ['GET', 'POST']);
+        $this->allow('guest', '/utilisateur/checkLogin', 'POST');
         $this->deny('player', '/utilisateur/inscription');
 
         $this->allow('player', '/utilisateur/profil', 'GET');

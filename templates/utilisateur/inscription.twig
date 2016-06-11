@@ -10,12 +10,13 @@
                 <div class="alert alert-danger" role="alert">{{ error }}</div>
             {% endif %}
             <div class="form-group">
-                <label for="inputLogin">Nom d'utilisateur</label>
-                <input name="login" type="text" maxlength="255" id="inputLogin" class="form-control" placeholder="Trenzaloard" required autofocus>
+                <label class="control-label" for="inputLogin">Nom d'utilisateur</label>
+                <input name="login" type="text" maxlength="255" minlength="3" id="inputLogin" class="form-control" placeholder="Trenzaloard" required autofocus>
+                <span class="help-block"></span>
             </div>
             {% if user.admin %}
                 <div class="form-group">
-                    <label for="selectRole">Rôle</label>
+                    <label class="control-label" for="selectRole">Rôle</label>
                     <select id="selectRole" name="role" class="form-control">
                         <option value="player">Joueur</option>
                         <option value="journalist">Journaliste</option>
@@ -26,28 +27,28 @@
                 </div>
             {% endif %}
             <div class="form-group">
-                <label for="inputPassword1">Mot de passe</label>
+                <label class="control-label" for="inputPassword1">Mot de passe</label>
                 <input name="pass" maxlength="255" minlength="8" type="password" id="inputPassword1" class="form-control" placeholder="******" required>
             </div>
             <div class="form-group">
-                <label for="inputPassword2">Retapez le mot de passe</label>
+                <label class="control-label" for="inputPassword2">Retapez le mot de passe</label>
                 <input name="pass2" maxlength="255" minlength="8" type="password" id="inputPassword2" class="form-control" placeholder="******" required>
             </div>
             <div class="form-group">
-                <label for="inputPrenom">Prenom</label>
+                <label class="control-label" for="inputPrenom">Prenom</label>
                 <input name="prenom" maxlength="255" type="text" id="inputPrenom" class="form-control" placeholder="Valentin" required>
             </div>
             <div class="form-group">
-                <label for="inputNom">Nom</label>
+                <label class="control-label" for="inputNom">Nom</label>
                 <input name="nom" maxlength="255" type="text" id="inputNom" class="form-control" placeholder="Pivet" required>
             </div>
             <div class="form-group">
-                <label for="inputEmail">Email</label>
+                <label class="control-label" for="inputEmail">Email</label>
                 <input name="email" maxlength="255" type="email" id="inputEmail" class="form-control" placeholder="vp@courrierx.com" required>
             </div>
             <input type="hidden" name="{{ csrfNameKey }}" value="{{ csrfName }}" />
             <input type="hidden" name="{{ csrfValueKey }}" value="{{ csrfValue }}" />
-            <button class="btn btn-lg btn-primary btn-block" type="submit">Inscription</button>
+            <button id="submitButton" class="btn btn-lg btn-primary btn-block" type="submit">Inscription</button>
         </form>
     </div>
 {% endblock %}
@@ -55,8 +56,29 @@
 {% block script %}
     <script type="text/javascript">
         $('#inputLogin').blur(function (){
-            console.log('blur');
+            var input = $(this);
+            var help = $(this).siblings('.help-block');
+            var loginText = input.val();
+            var buttonInscription = $('#submitButton');
+            if(loginText.length >= 3){
+                help.text('Vérification de la disponibilité...');
+                $.ajax({
+                    url: "{{ path_for('checkLogin') }}",
+                    method: "post",
+                    data: {"login": loginText}
+                }).done(function (data){
+                    data = $.parseJSON(data);
+                    if(data.login == loginText && data.exist == false){
+                        input.closest('.form-group').addClass('has-success').removeClass('has-error');
+                        help.text('Ce login est valide');
+                        buttonInscription.prop('disabled', false);
+                    }else{
+                        input.closest('.form-group').addClass('has-error').removeClass('has-success');
+                        help.text('Ce login est déjà pris');
+                        buttonInscription.prop('disabled', true);
+                    }
+                });
+            }
         });
-
     </script>
 {% endblock %}
