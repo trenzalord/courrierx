@@ -16,7 +16,7 @@ class User{
     private $email;
 
     public function __construct($data){
-        $this->id = $data['id'];
+        $this->id = isset($data['id'])? $data['id'] : 0;
         $this->nom = $data['nom'];
         $this->role = $data['role'];
         $this->prenom = $data['prenom'];
@@ -118,5 +118,33 @@ class User{
     public function setRole($role)
     {
         $this->role = $role;
+    }
+
+    public function isValid(){
+        return !empty($this->login)
+        && !empty($this->nom)
+        && !empty($this->prenom)
+        && !empty($this->role)
+        && !empty($this->email);
+    }
+
+    public function isPlayer(){
+        return $this->role == "player" || $this->isJournalist();
+    }
+
+    public function isJournalist(){
+        return $this->role == "journalist" || $this->isGuard();
+    }
+
+    public function isGuard(){
+        return $this->role == "guard" || $this->isAuthor();
+    }
+
+    public function isAuthor(){
+        return $this->role == "author" || $this->isAdmin();
+    }
+
+    public function isAdmin(){
+        return $this->role == "admin";
     }
 }

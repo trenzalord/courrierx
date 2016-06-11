@@ -62,6 +62,15 @@ $c['authAdapter'] = function ($c) {
     return $adapter;
 };
 
+$c['csrf'] = function ($c) {
+    $guard = new \Slim\Csrf\Guard();
+    $guard->setFailureCallable(function ($request, $response, $next) {
+        $request = $request->withAttribute("csrf_status", false);
+        return $next($request, $response);
+    });
+    return $guard;
+};
+
 $c['errorHandler'] = function ($c) {
     return function ($request, $response, $exception) use ($c) {
         $code = 0;
@@ -76,7 +85,7 @@ $c['errorHandler'] = function ($c) {
             default:
                 return $c['response']->withstatus(500)
                     ->withHeader('Content-Type', 'text/html')
-                    ->write('Something went wrong!')
+                    ->write('Something went wrong!<br>')
                     ->write($exception);
         }
     };
@@ -91,6 +100,8 @@ $c->register(new \JeremyKendall\Slim\Auth\ServiceProvider\SlimAuthProvider());
 $app = new \Slim\App($c);
 
 $app->add($app->getContainer()->get('slimAuthThrowHttpExceptionMiddleware'));
+
+$app->add($app->getContainer()->get('csrf'));
 
 //Ajout de la variable gloable user dans toutes les vues si on a une identité
 if($app->getContainer()->get('authenticator')->hasIdentity()){
