@@ -4,11 +4,11 @@
 
 {%  block content %}
     <div class="row">
+        <h2>Inscription</h2>
         <form action="" method="post">
-            <h2>Inscription</h2>
-            {% if error %}
-                <div class="alert alert-danger" role="alert">{{ error }}</div>
-            {% endif %}
+            {% block errorFlash %}
+                {{ parent() }}
+            {% endblock %}
             <div class="form-group">
                 <label class="control-label" for="inputLogin">Nom d'utilisateur</label>
                 <input name="login" type="text" maxlength="255" minlength="3" id="inputLogin" class="form-control" placeholder="Trenzaloard" required autofocus>

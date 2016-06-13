@@ -5,9 +5,9 @@
 {%  block content %}
     <form class="form-signin" action="" method="post">
         <h2 class="form-signin-heading">Veuillez vous connecter</h2>
-        {% if error %}
-            <div class="alert alert-danger" role="alert">{{ error }}</div>
-        {% endif %}
+        {% block errorFlash %}
+            {{ parent() }}
+        {% endblock %}
         <label for="inputLogin" class="sr-only">Nom d'utilisateur</label>
         <input name="login" type="text" max="255" id="inputLogin" class="form-control" placeholder="Trenzaloard" required autofocus>
         <label for="inputPassword" class="sr-only">Mot de passe</label>

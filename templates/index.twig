@@ -9,6 +9,12 @@
             <p>Un super site en construction</p>
         </div>
     </div>
+    {% block successFlash %}
+        {{ parent() }}
+    {% endblock %}
+    {% block errorFlash %}
+        {{ parent() }}
+    {% endblock %}
     <div class="row">
         {% if user.login %}
             <h2>Connecté en tant que {{ user.prenom }} {{ user.nom }}</h2>

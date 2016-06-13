@@ -43,13 +43,23 @@ $c['view'] = function ($c) {
     return $view;
 };
 
+$c['flash'] = function ($c){
+    return new \Slim\Flash\Messages();
+};
+
 $c['notFoundHandler'] = function ($c) {
     return function ($request, $response) use ($c) {
-        return $c['response']->withStatus(404)->withRedirect('/404');
+        return $c['response']->withStatus(404)->withRedirect($c['router']->pathFor('404'));
     };
 };
 
-$c['authAdapter'] = function ($c) {
+$c['notAllowedHandler'] = function ($c) {
+    return function ($request, $response, $methods) use ($c) {
+        return $c['response']->withStatus(404)->withRedirect($c['router']->pathFor('404'));
+    };
+};
+
+$c['authAdapter'] = function () {
     $db = \API\V1\Repository\StaticRepo::getConnexion();
     $adapter = new \JeremyKendall\Slim\Auth\Adapter\Db\PdoAdapter(
         $db,
@@ -62,7 +72,7 @@ $c['authAdapter'] = function ($c) {
     return $adapter;
 };
 
-$c['csrf'] = function ($c) {
+$c['csrf'] = function () {
     $guard = new \Slim\Csrf\Guard();
     $guard->setFailureCallable(function ($request, $response, $next) {
         $request = $request->withAttribute("csrf_status", false);
@@ -79,9 +89,9 @@ $c['errorHandler'] = function ($c) {
         }
         switch($code){
             case 401:
-                return $c['response']->withStatus(401)->withredirect('/401');
+                return $c['response']->withStatus(401)->withredirect($c['router']->pathFor('401'));
             case 403:
-                return $c['response']->withStatus(403)->withRedirect('/403');
+                return $c['response']->withStatus(403)->withRedirect($c['router']->pathFor('403'));
             default:
                 return $c['response']->withstatus(500)
                     ->withHeader('Content-Type', 'text/html')
@@ -99,16 +109,24 @@ $c->register(new \JeremyKendall\Slim\Auth\ServiceProvider\SlimAuthProvider());
 
 $app = new \Slim\App($c);
 
+//Middleware d'authentification
 $app->add($app->getContainer()->get('slimAuthThrowHttpExceptionMiddleware'));
 
+//Sécurité des fomulaires
 $app->add($app->getContainer()->get('csrf'));
+
+//Ajout des messages flash pour les templates
+$app->add(function ($request, $response, $next) {
+    $this->view->offsetSet("flash", $this->flash);
+    return $next($request, $response);
+});
 
 //Ajout de la variable gloable user dans toutes les vues si on a une identité
 if($app->getContainer()->get('authenticator')->hasIdentity()){
     $app->getContainer()->get('view')->getEnvironment()->addGlobal('user', new \API\V1\Model\User($app->getContainer()->get('authenticator')->getIdentity()));
 }
 
-/* Chargement des routes */
+// Chargement des routes
 $routes = glob('../routers/*.router.php');
 foreach ($routes as $route){
     require $route;
