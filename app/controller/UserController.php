@@ -5,16 +5,17 @@
  * Date: 08/06/2016
  * Time: 21:47
  */
-namespace API\V1\Action;
+namespace App\Controller;
 
-use API\V1\Model\User;
-use API\V1\Repository\UserRepo;
+use App\Model\User;
 use \Interop\Container\ContainerInterface;
 use Zend\Authentication\Result;
 use \Slim\Http\Request;
 use \Slim\Http\Response;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\QueryException;
 
-class UserAction extends BaseAction{
+class UserController extends BaseController{
 
     public function __construct(ContainerInterface $coi) {
         parent::__construct($coi);
@@ -69,24 +70,27 @@ class UserAction extends BaseAction{
         if(false !== $req->getAttribute('csrf_status')){
 
             $params = $req->getParsedBody();
-            unset($params[$this->csrf->getTokenNameKey()]);
-            unset($params[$this->csrf->getTokenValueKey()]);
 
-            if(!(!empty($params['role']) && isset($this->user) && $this->user->isAdmin())){
-                $params['role'] = 'player';
-            }
-
-            $newUser = new User($params);
-
-            if($params['pass'] == $params['pass2'] && $newUser->isValid()){
-
-                if(UserRepo::insertUser($newUser, $params['pass'])){
-                    $this->flash->addMessage('success', "Merci pour ton inscription " . $newUser->getPrenom() . " " . $newUser->getNom());
-                    return $res->withRedirect($this->router->pathFor('home'));
+            if($params['pass'] == $params['pass2']){
+                $newUser = new User();
+                $newUser->login = $params['login'];
+                $newUser->role = 'player';
+                if(!empty($params['role']) && isset($this->user) && $this->user->isAdmin()){
+                    $newUser->role = $params['role'];
                 }
+                $newUser->pass = password_hash($params['pass'], PASSWORD_DEFAULT);
+                $newUser->nom = $params['nom'];
+                $newUser->prenom = $params['prenom'];
+                $newUser->email = $params['email'];
 
-                $this->flash->addMessage('error', "Impossible d'inserer l'utilisateur :(");
-                return $res->withRedirect($this->router->pathFor('register'));
+                try{
+                    $newUser->save();
+                    $this->flash->addMessage('success', "Merci pour ton inscription " . $newUser->prenom . " " . $newUser->nom);
+                    return $res->withRedirect($this->router->pathFor('home'));
+                }catch(QueryException $e){
+                    $this->flash->addMessage('error', "Impossible d'inserer l'utilisateur :(");
+                    return $res->withRedirect($this->router->pathFor('register'));
+                }
             }
 
             $this->flash->addMessage('error', "Les données de l'utilisateur sont incorrectes");
@@ -100,7 +104,12 @@ class UserAction extends BaseAction{
     public function checkLogin(Request $req, Response $res){
         if($req->isXhr()) {
             $login = $req->getParsedBody()['login'];
-            $exist = UserRepo::checkExistingLogin($login);
+            $exist = true;
+            try{
+                User::where('login', $login)->firstOrFail();
+            }catch(ModelNotFoundException $e){
+                $exist = false;
+            }
             return $res->withJson(json_encode(["login" => $login, "exist" => $exist]));
         }
 

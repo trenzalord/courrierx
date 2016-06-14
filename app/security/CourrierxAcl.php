@@ -5,7 +5,7 @@
  * Date: 10/06/2016
  * Time: 10:56
  */
-namespace API\V1\Security;
+namespace App\Security;
 
 use Zend\Permissions\Acl\Acl as ZendAcl;
 

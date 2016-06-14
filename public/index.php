@@ -9,28 +9,47 @@
 /* AUTOLOADER */
 require('../vendor/autoload.php');
 /* Loader des classes de l'API */
-function api_autoloader($class)
+function app_autoloader($class)
 {
-    if(explode("\\", $class)[0] == "API") {
-        $filename = '../' . str_replace('\\', '/', $class) . '.php';
+    if(explode("\\", $class)[0] == "App") {
+        $folders = explode("\\", $class);
+        $className = array_pop($folders);
+        $filename = '../' . implode('/', array_map('strtolower', $folders)) . '/' . $className . '.php';
         require $filename;
     }
 }
-spl_autoload_register('api_autoloader');
-
-/* Database configuration TO MOVE ? */
-\API\V1\Repository\StaticRepo::setConfig(['dbHost' => 'localhost', 'dbName' => 'courrierx', 'dbUser' => 'root', 'dbPass' => '']);
+spl_autoload_register('app_autoloader');
 
 $configuration = [
     'settings' => [
         'determineRouteBeforeAppMiddleware' => true,
-        'displayErrorDetails' => true
+        'displayErrorDetails' => true,
+        'db' => [
+            'driver' => 'mysql',
+            'host' => 'localhost',
+            'database' => 'courrierx',
+            'username' => 'root',
+            'password' => '',
+            'charset'   => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix'    => '',
+        ]
     ],
 ];
 
 session_start();
 
 $c = new \Slim\Container($configuration);
+
+$c['db'] = function ($c) {
+    $capsule = new \Illuminate\Database\Capsule\Manager;
+    $capsule->addConnection($c['settings']['db']);
+
+    $capsule->setAsGlobal();
+    $capsule->bootEloquent();
+
+    return $capsule;
+};
 
 $c['view'] = function ($c) {
     $view = new \Slim\Views\Twig('../templates');
@@ -59,8 +78,8 @@ $c['notAllowedHandler'] = function ($c) {
     };
 };
 
-$c['authAdapter'] = function () {
-    $db = \API\V1\Repository\StaticRepo::getConnexion();
+$c['authAdapter'] = function ($c) {
+    $db = $c['db']->getConnection('default')->getPdo();
     $adapter = new \JeremyKendall\Slim\Auth\Adapter\Db\PdoAdapter(
         $db,
         "user",
@@ -84,7 +103,8 @@ $c['csrf'] = function () {
 $c['errorHandler'] = function ($c) {
     return function ($request, $response, $exception) use ($c) {
         $code = 0;
-        if(is_a($exception, 'JeremyKendall\Slim\Auth\Exception\HttpUnauthorizedException') || is_a($exception, 'JeremyKendall\Slim\Auth\Exception\HttpForbiddenException')){
+        if(is_a($exception, 'JeremyKendall\Slim\Auth\Exception\HttpUnauthorizedException')
+            || is_a($exception, 'JeremyKendall\Slim\Auth\Exception\HttpForbiddenException')){
             $code = $exception->getStatusCode();
         }
         switch($code){
@@ -102,7 +122,7 @@ $c['errorHandler'] = function ($c) {
 };
 
 $c['acl'] = function ($c) {
-    return new \API\V1\Security\CourrierxAcl();
+    return new \App\Security\CourrierxAcl();
 };
 
 $c->register(new \JeremyKendall\Slim\Auth\ServiceProvider\SlimAuthProvider());
@@ -123,7 +143,8 @@ $app->add(function ($request, $response, $next) {
 
 //Ajout de la variable gloable user dans toutes les vues si on a une identité
 if($app->getContainer()->get('authenticator')->hasIdentity()){
-    $app->getContainer()->get('view')->getEnvironment()->addGlobal('user', new \API\V1\Model\User($app->getContainer()->get('authenticator')->getIdentity()));
+    $app->getContainer()->get('view')->getEnvironment()
+        ->addGlobal('user', \App\Model\User::find($app->getContainer()->get('authenticator')->getIdentity()['id']));
 }
 
 // Chargement des routes

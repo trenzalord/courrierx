@@ -6,13 +6,13 @@
  * Time: 19:14
  */
 
-namespace API\V1\Action;
+namespace App\Controller;
 
-use API\V1\Model\User;
+use App\Model\User;
 use \Interop\Container\ContainerInterface;
 
 
-class BaseAction{
+class BaseController{
     /* @var $ci ContainerInterface */
     protected $coi;
 
@@ -28,7 +28,7 @@ class BaseAction{
     /* @var $flash \Slim\Flash\Messages */
     protected $flash;
 
-    /* @var $user \API\V1\Model\User */
+    /* @var $user \App\Model\User */
     protected $user;
 
     /* @var $router \Slim\Router */
@@ -43,7 +43,7 @@ class BaseAction{
         $this->router = $this->coi->get('router');
         $this->user = null;
         if($this->auth->hasIdentity()){
-            $this->user = new User($this->auth->getIdentity());
+            //$this->user = new User($this->auth->getIdentity());
         }
     }
 }

@@ -7,10 +7,10 @@
  */
 
 $app->group('/utilisateur', function (){
-    $this->map(['GET', 'POST'], '/connexion', '\API\V1\Action\UserAction:connexion')->setName('login');
-    $this->get('/deconnexion', '\API\V1\Action\UserAction:deconnexion')->setName('logout');
-    $this->get('/profil', '\API\V1\Action\UserAction:profil')->setName('profile');
-    $this->post('/inscription', '\API\V1\Action\UserAction:postInscription');
-    $this->get('/inscription', '\API\V1\Action\UserAction:getInscription')->setName('register');
-    $this->post('/checkLogin', '\API\V1\Action\UserAction:checkLogin')->setName('checkLogin');
+    $this->map(['GET', 'POST'], '/connexion', '\App\Controller\UserController:connexion')->setName('login');
+    $this->get('/deconnexion', '\App\Controller\UserController:deconnexion')->setName('logout');
+    $this->get('/profil', '\App\Controller\UserController:profil')->setName('profile');
+    $this->post('/inscription', '\App\Controller\UserController:postInscription');
+    $this->get('/inscription', '\App\Controller\UserController:getInscription')->setName('register');
+    $this->post('/checkLogin', '\App\Controller\UserController:checkLogin')->setName('checkLogin');
 });
