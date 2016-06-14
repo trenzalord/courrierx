@@ -8,7 +8,7 @@
 
 /* AUTOLOADER */
 require('../vendor/autoload.php');
-/* Loader des classes de l'API */
+/* Loader des classes de l'App */
 function app_autoloader($class)
 {
     if(explode("\\", $class)[0] == "App") {
