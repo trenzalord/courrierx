@@ -8,17 +8,6 @@
 
 /* AUTOLOADER */
 require('../vendor/autoload.php');
-/* Loader des classes de l'App */
-function app_autoloader($class)
-{
-    if(explode("\\", $class)[0] == "App") {
-        $folders = explode("\\", $class);
-        $className = array_pop($folders);
-        $filename = '../' . implode('/', array_map('strtolower', $folders)) . '/' . $className . '.php';
-        require $filename;
-    }
-}
-spl_autoload_register('app_autoloader');
 
 $configuration = [
     'settings' => [
@@ -62,7 +51,7 @@ $c['view'] = function ($c) {
     return $view;
 };
 
-$c['flash'] = function ($c){
+$c['flash'] = function ($c) {
     return new \Slim\Flash\Messages();
 };
 
@@ -103,11 +92,11 @@ $c['csrf'] = function () {
 $c['errorHandler'] = function ($c) {
     return function ($request, $response, $exception) use ($c) {
         $code = 0;
-        if(is_a($exception, 'JeremyKendall\Slim\Auth\Exception\HttpUnauthorizedException')
-            || is_a($exception, 'JeremyKendall\Slim\Auth\Exception\HttpForbiddenException')){
+        if (is_a($exception, 'JeremyKendall\Slim\Auth\Exception\HttpUnauthorizedException')
+            || is_a($exception, 'JeremyKendall\Slim\Auth\Exception\HttpForbiddenException') ) {
             $code = $exception->getStatusCode();
         }
-        switch($code){
+        switch ($code) {
             case 401:
                 return $c['response']->withStatus(401)->withredirect($c['router']->pathFor('401'));
             case 403:
@@ -122,7 +111,7 @@ $c['errorHandler'] = function ($c) {
 };
 
 $c['acl'] = function ($c) {
-    return new \App\Security\CourrierxAcl();
+    return new \Courrierx\Security\CourrierxAcl();
 };
 
 $c->register(new \JeremyKendall\Slim\Auth\ServiceProvider\SlimAuthProvider());
@@ -142,14 +131,16 @@ $app->add(function ($request, $response, $next) {
 });
 
 //Ajout de la variable gloable user dans toutes les vues si on a une identité
-if($app->getContainer()->get('authenticator')->hasIdentity()){
+if ($app->getContainer()->get('authenticator')->hasIdentity()) {
     $app->getContainer()->get('view')->getEnvironment()
-        ->addGlobal('user', \App\Model\User::find($app->getContainer()->get('authenticator')->getIdentity()['id']));
+        ->addGlobal('user', \Courrierx\Model\User::find(
+            $app->getContainer()->get('authenticator')->getIdentity()['id']
+        ));
 }
 
 // Chargement des routes
 $routes = glob('../routers/*.router.php');
-foreach ($routes as $route){
+foreach ($routes as $route) {
     require $route;
 }
 

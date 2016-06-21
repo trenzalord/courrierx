@@ -5,14 +5,14 @@
  * Date: 10/06/2016
  * Time: 10:56
  */
-namespace App\Security;
+namespace Courrierx\Security;
 
 use Zend\Permissions\Acl\Acl as ZendAcl;
 
-class CourrierxAcl extends ZendAcl{
-
-    public function __construct(){
-
+class CourrierxAcl extends ZendAcl
+{
+    public function __construct()
+    {
         // APPLICATION ROLES
         $this->addRole('guest');
         // member role "extends" guest, meaning the member role will get all of
@@ -53,5 +53,4 @@ class CourrierxAcl extends ZendAcl{
         // This allows admin access to everything
         $this->allow('admin');
     }
-
 }

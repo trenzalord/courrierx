@@ -6,13 +6,13 @@
  * Time: 19:14
  */
 
-namespace App\Controller;
+namespace Courrierx\Controller;
 
-use App\Model\User;
+use Courrierx\Model\User;
 use \Interop\Container\ContainerInterface;
 
-
-class BaseController{
+class BaseController
+{
     /* @var $ci ContainerInterface */
     protected $coi;
 
@@ -34,7 +34,8 @@ class BaseController{
     /* @var $router \Slim\Router */
     protected $router;
 
-    public function __construct(ContainerInterface $coi) {
+    public function __construct(ContainerInterface $coi)
+    {
         $this->coi = $coi;
         $this->view = $this->coi->get('view');
         $this->auth = $this->coi->get('authenticator');
@@ -42,8 +43,8 @@ class BaseController{
         $this->flash = $this->coi->get('flash');
         $this->router = $this->coi->get('router');
         $this->user = null;
-        if($this->auth->hasIdentity()){
-            //$this->user = new User($this->auth->getIdentity());
+        if ($this->auth->hasIdentity()) {
+            $this->user = User::find($this->auth->getIdentity()['id']);
         }
     }
 }
