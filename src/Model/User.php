@@ -12,7 +12,46 @@ use \Illuminate\Database\Eloquent\Model as Model;
 class User extends Model
 {
     protected $table = 'user';
-    public $timestamps = false;
+
+    /**
+     * Retourne les articles de l'utilisateur
+     */
+    public function articles()
+    {
+        return $this->hasMany('Courriex\Model\Article', 'auteur_id');
+    }
+
+    /**
+     * Retourne les notes données par l'utilisateur
+     */
+    public function notes()
+    {
+        return $this->hasMany('Courriex\Model\Note', 'auteur_id');
+    }
+
+    /**
+     * Retourne les commentaires écrits par l'utilisateur
+     */
+    public function commentaires()
+    {
+        return $this->hasMany('Courriex\Model\Commentaire', 'auteur_id');
+    }
+
+    /**
+     * Retourne les nouvelles écrites par l'utilisateur
+     */
+    public function nouvelles()
+    {
+        return $this->hasMany('Courriex\Model\Nouvelle', 'auteur_id');
+    }
+
+    /**
+     * Retourne les romans écrits par l'utilisateur
+     */
+    public function romans()
+    {
+        return $this->hasMany('Courriex\Model\Roman', 'auteur_id');
+    }
 
     public function isPlayer()
     {
