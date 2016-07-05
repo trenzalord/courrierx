@@ -12,6 +12,7 @@
 </head>
 <body>
     <div class="container">
+        {% include "navbar.twig" %}
         {%  block content %}
             {% block successFlash %}
                 {% if flash.getMessage('success')[0] %}

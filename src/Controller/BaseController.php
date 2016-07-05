@@ -28,7 +28,7 @@ class BaseController
     /* @var $flash \Slim\Flash\Messages */
     protected $flash;
 
-    /* @var $user \App\Model\User */
+    /* @var $user \Courrierx\Model\User */
     protected $user;
 
     /* @var $router \Slim\Router */

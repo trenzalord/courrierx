@@ -35,6 +35,11 @@ class UserController extends BaseController
                 $result = $this->auth->authenticate($login, $password);
 
                 if ($result->isValid()) {
+                    /* @var $connectedUser \Courrierx\Model\User */
+                    $connectedUser = User::find($result->getIdentity()['id']);
+                    $connectedUser->date_derniere_connexion = date("Y-m-d H:m:s");
+                    $connectedUser->save();
+
                     $this->flash->addMessage('success', "Connexion réussie !");
                     return $res->withRedirect($this->router->pathFor('home'));
                 }
@@ -86,6 +91,7 @@ class UserController extends BaseController
                 $newUser->nom = $params['nom'];
                 $newUser->prenom = $params['prenom'];
                 $newUser->email = $params['email'];
+                $newUser->date_naissance = $params['dateNaissance'];
 
                 try {
                     $newUser->save();

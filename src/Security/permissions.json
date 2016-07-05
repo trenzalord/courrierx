@@ -1,0 +1,95 @@
+{
+  "/": {
+    "allow": {
+      "role": "guest",
+      "method": ["GET"]
+    },
+    "routes": {
+      "404": {
+        "allow": { "role": "guest", "method": ["GET"] }
+      },
+      "403": {
+        "allow": { "role": "guest", "method": ["GET"] }
+      },
+      "401": {
+        "allow": { "role": "guest", "method": ["GET"] }
+      },
+      "utilisateur/": {
+        "routes": {
+          "connexion": {
+            "allow": { "role": "guest", "method": ["GET", "POST"] }
+          },
+          "deconnexion": {
+            "allow": { "role": "player", "method": ["GET"] }
+          },
+          "inscription": {
+            "allow": { "role": "guest", "method": ["GET", "POST"] },
+            "deny": { "role": "player", "method": null }
+          },
+          "checkLogin": {
+            "allow": { "role": "guest", "method": ["POST"] }
+          },
+          "profil": {
+            "allow": { "role": "player", "method": ["GET"] }
+          }
+        }
+      },
+      "recit/": {
+        "routes": {
+          "romans": {
+            "allow": { "role": "guest", "method": ["GET"] }
+          },
+          "nouvelles": {
+            "allow": { "role": "guest", "method": ["GET"] }
+          },
+          "images": {
+            "allow": { "role": "guest", "method": ["GET"] }
+          },
+          "videos": {
+            "allow": { "role": "guest", "method": ["GET"] }
+          },
+          "audios": {
+            "allow": { "role": "guest", "method": ["GET"] }
+          }
+        }
+      },
+      "univers/": {
+        "routes": {
+          "geographie": {
+            "allow": { "role": "guest", "method": ["GET"] }
+          },
+          "histoire-economie": {
+            "allow": { "role": "guest", "method": ["GET"] }
+          },
+          "politique-societe": {
+            "allow": { "role": "guest", "method": ["GET"] }
+          },
+          "religion": {
+            "allow": { "role": "guest", "method": ["GET"] }
+          },
+          "technologie-science": {
+            "allow": { "role": "guest", "method": ["GET"] }
+          }
+        }
+      },
+      "articles/": {
+        "routes": {
+          "nouveau[/{categorie:[A-Z]{3}}]": {
+            "allow": { "role": "journalist", "method": ["GET", "POST"] }
+          },
+          "{id:[0-9]+}": {
+            "allow": { "role": "guest", "method": ["GET"] },
+            "routes": {
+              "/editer": {
+                "allow": { "role": "journalist", "method": ["GET", "POST"] }
+              }
+            }
+          }
+        }
+      },
+      "journal": {
+        "allow": { "role": "guest", "method": ["GET"] }
+      }
+    }
+  }
+}

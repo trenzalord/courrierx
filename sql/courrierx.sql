@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  127.0.0.1
--- Généré le :  Ven 24 Juin 2016 à 03:26
+-- Généré le :  Mar 05 Juillet 2016 à 23:27
 -- Version du serveur :  5.7.9
 -- Version de PHP :  7.0.0
 
@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `article` (
   `auteur_id` int(11) NOT NULL,
   `titre` varchar(255) NOT NULL,
   `dans_univers` tinyint(1) NOT NULL,
+  `categorie` enum('IMG','VID','AUD','GEO','HEE','PES','RLG','TES','ATR') NOT NULL DEFAULT 'ATR',
   `contenu` text NOT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,

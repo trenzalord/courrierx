@@ -23,34 +23,47 @@ class CourrierxAcl extends ZendAcl
         $this->addRole('author', 'guard');
         $this->addRole('admin', 'author');
 
-        // APPLICATION RESOURCES
-        // Application resources == Slim route patterns
-        $this->addResource('/');
-        $this->addResource('/404');
-        $this->addResource('/401');
-        $this->addResource('/403');
-        $this->addResource('/utilisateur/connexion');
-        $this->addResource('/utilisateur/deconnexion');
-        $this->addResource('/utilisateur/profil');
-        $this->addResource('/utilisateur/inscription');
-        $this->addResource('/utilisateur/checkLogin');
+        $json = file_get_contents("../src/Security/permissions.json");
+        $permissions = new \RecursiveIteratorIterator(
+            new \RecursiveArrayIterator(json_decode($json, true)),
+            \RecursiveIteratorIterator::SELF_FIRST);
 
-        // APPLICATION PERMISSIONS
-        // Now we allow or deny a role's access to resources. The third argument
-        // is 'privilege'. We're using HTTP method as 'privilege'.
-        $this->allow('guest', '/', 'GET');
-        $this->allow('guest', '/404', 'GET');
-        $this->allow('guest', '/403', 'GET');
-        $this->allow('guest', '/401', 'GET');
-        $this->allow('guest', '/utilisateur/connexion', ['GET', 'POST']);
-        $this->allow('guest', '/utilisateur/deconnexion', 'GET');
-        $this->allow('guest', '/utilisateur/inscription', ['GET', 'POST']);
-        $this->allow('guest', '/utilisateur/checkLogin', 'POST');
-        $this->deny('player', '/utilisateur/inscription');
-
-        $this->allow('player', '/utilisateur/profil', 'GET');
+        $this->setupRoutes($permissions);
 
         // This allows admin access to everything
         $this->allow('admin');
+    }
+
+    private function setupRoutes($array, $routeName = "")
+    {
+        foreach ($array as $key => $val) {
+            if (is_array($val)) {
+                switch ($key) {
+                    case "routes":
+                        foreach ($val as $routeNameExtremity => $array) {
+                            if (substr($routeNameExtremity, -1) != "/") {
+                                $this->addResource($routeName . $routeNameExtremity);
+                            }
+                            $this->setupRoutes($array, $routeName . $routeNameExtremity);
+                        }
+                        break;
+                    case "allow":
+                        $this->allow($val['role'], $routeName, $val['method']);
+                        break;
+                    case "deny":
+                        $this->deny($val['role'], $routeName, $val['method']);
+                        break;
+                    case "method":
+                    case "role":
+                        break;
+                    default:
+                        $routeName = $key;
+                        $this->addResource($routeName);
+                }
+                if ($key == "routes") {
+                    break;
+                }
+            }
+        }
     }
 }

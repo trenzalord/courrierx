@@ -1,0 +1,55 @@
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{{ path_for('home') }}">CourrierX</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ path_for('home') }}">Home</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Récit <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ path_for('romans') }}">Romans</a></li>
+                        <li><a href="{{ path_for('nouvelles') }}">Nouvelles</a></li>
+                        <li><a href="{{ path_for('images') }}">Images</a></li>
+                        <li><a href="{{ path_for('videos') }}">Vidéos</a></li>
+                        <li><a href="{{ path_for('audios') }}">Audio</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Univers <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{{ path_for('geographie') }}">Géographie</a></li>
+                        <li><a href="{{ path_for('histoire-economie') }}">Histoire et économie</a></li>
+                        <li><a href="{{ path_for('politique-societe') }}">Politique et Société</a></li>
+                        <li><a href="{{ path_for('religion') }}">Religion</a></li>
+                        <li><a href="{{ path_for('technologie-science') }}">Technologie et science</a></li>
+                    </ul>
+                </li>
+                <li><a href="{{ path_for('journal') }}">Journal</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Nous aider</a></li>
+                {% if user.login %}
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ user.prenom }} {{ user.nom }} <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{{ path_for('profile') }}">Profil</a></li>
+                            <li role="separator" class="divider"></li>
+                            <li><a href="{{ path_for('logout') }}">Déconnexion</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    <li><a href="{{ path_for('register') }}">Inscription</a></li>
+                    <li><a href="{{ path_for('login') }}">Connexion</a></li>
+                {% endif %}
+            </ul>
+        </div><!--/.nav-collapse -->
+    </div><!--/.container-fluid -->
+</nav>

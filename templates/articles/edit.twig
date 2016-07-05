@@ -1,0 +1,43 @@
+{%  extends "base.twig" %}
+
+{% if article.categorie %}
+    {% set categorie = article.categorie %}
+{% endif %}
+
+{% block title %}{% if edit %}Editer {{ article.titre }}{% else %}Nouvel article{% endif %}{% endblock %}
+
+{%  block content %}
+    <h2>{% if edit %}Editer {{ article.titre }}{% else %}Nouvel article{% endif %}</h2>
+    <hr>
+    <form method="post" action="">
+        <div class="form-group">
+            <label class="control-label" for="inputTitre">Titre</label>
+            <input id="inputTitre" class="form-control" type="text" maxlength="255" minlength="3" placeholder="Inserez un titre ici" name="titre" value="{{ article.titre }}" required/>
+        </div>
+        <div class="form-group">
+            <label class="control-label" for="selCategorie">Categorie</label>
+            <select id="selCategorie" class="form-control">
+                <option value="ATR" {% if categorie == "ATR" %}selected="selected"{% endif %}>Autre</option>
+                <option value="IMG" {% if categorie == "IMG" %}selected="selected"{% endif %}>Image</option>
+                <option value="VID" {% if categorie == "VID" %}selected="selected"{% endif %}>Vidéo</option>
+                <option value="AUD" {% if categorie == "AUD" %}selected="selected"{% endif %}>Audio</option>
+                {% if user.author %}
+                    <option value="GEO" {% if categorie == "GEO" %}selected="selected"{% endif %}>Univers - Géographie</option>
+                    <option value="HEE" {% if categorie == "HEE" %}selected="selected"{% endif %}>Univers - Histoire et économie</option>
+                    <option value="PES" {% if categorie == "PES" %}selected="selected"{% endif %}>Univers - Politique et société</option>
+                    <option value="RLG" {% if categorie == "RLG" %}selected="selected"{% endif %}>Univers - Religion</option>
+                    <option value="TES" {% if categorie == "TES" %}selected="selected"{% endif %}>Univers - Technologie et science</option>
+                {% endif %}
+            </select>
+        </div>
+        {% if user.author %}
+            <div class="form-group">
+                <label class="control-label" for="checkboxUnivers">Dans l'univers</label> <input name="dans_univers" type="checkbox" id="checkboxUnivers" {% if article.dans_univers %}checked="checked"{% endif %} />
+            </div>
+        {% endif %}
+        <div class="form-group">
+            <label class="control-label" for="inputContenu">Contenu</label>
+            <textarea id="inputContenu" class="form-control" name="contenu" required>{{ article.contenu }}</textarea>
+        </div>
+    </form>
+{% endblock %}
