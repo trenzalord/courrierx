@@ -21,26 +21,26 @@ class RecitController extends BaseController
 
     public function romans(Request $req, Response $res)
     {
-        return $this->view->render($res, 'articles/liste.twig', ['titre' => 'Romans', 'section' => 'Récit']);
+        return $this->renderArticles($res, 'Romans', 'Récit');
     }
 
     public function nouvelles(Request $req, Response $res)
     {
-        return $this->view->render($res, 'articles/liste.twig', ['titre' => 'Nouvelles', 'section' => 'Récit']);
+        return $this->renderArticles($res, 'Nouvelles', 'Récit');
     }
 
     public function images(Request $req, Response $res)
     {
-        return $this->view->render($res, 'articles/liste.twig', ['titre' => 'Images', 'section' => 'Récit']);
+        return $this->renderArticles($res, 'Images', 'Récit');
     }
 
     public function videos(Request $req, Response $res)
     {
-        return $this->view->render($res, 'articles/liste.twig', ['titre' => 'Videos', 'section' => 'Récit']);
+        return $this->renderArticles($res, 'Vidéos', 'Récit');
     }
 
     public function audios(Request $req, Response $res)
     {
-        return $this->view->render($res, 'articles/liste.twig', ['titre' => 'Audios', 'section' => 'Récit']);
+        return $this->renderArticles($res, 'Audios', 'Récit');
     }
 }

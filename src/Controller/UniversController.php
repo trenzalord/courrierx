@@ -21,29 +21,26 @@ class UniversController extends BaseController
 
     public function geographie(Request $req, Response $res)
     {
-        return $this->view->render($res, 'articles/liste.twig', ['titre' => 'Géographie', 'section' => 'Récit']);
+        return $this->renderArticles($res, 'Géographie', 'Univers');
     }
 
     public function histoireEconomie(Request $req, Response $res)
     {
-        return $this->view->render($res, 'articles/liste.twig',
-            ['titre' => 'Histoire et économie', 'section' => 'Récit']);
+        return $this->renderArticles($res, 'Histoire et économie', 'Univers');
     }
 
     public function politiqueSociete(Request $req, Response $res)
     {
-        return $this->view->render($res, 'articles/liste.twig',
-            ['titre' => 'Politique et société', 'section' => 'Récit']);
+        return $this->renderArticles($res, 'Politique et société', 'Univers');
     }
 
     public function religion(Request $req, Response $res)
     {
-        return $this->view->render($res, 'articles/liste.twig', ['titre' => 'Religion', 'section' => 'Récit']);
+        return $this->renderArticles($res, 'Religion', 'Univers');
     }
 
     public function technologieScience(Request $req, Response $res)
     {
-        return $this->view->render($res, 'articles/liste.twig',
-            ['titre' => 'Technologie et science', 'section' => 'Récit']);
+        return $this->renderArticles($res, 'Technologie et science', 'Univers');
     }
 }

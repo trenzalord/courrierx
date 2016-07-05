@@ -10,6 +10,7 @@ namespace Courrierx\Controller;
 
 use Courrierx\Model\User;
 use \Interop\Container\ContainerInterface;
+use \Slim\Http\Response;
 
 class BaseController
 {
@@ -46,5 +47,10 @@ class BaseController
         if ($this->auth->hasIdentity()) {
             $this->user = User::find($this->auth->getIdentity()['id']);
         }
+    }
+
+    public function renderArticles(Response $res, $titre, $section)
+    {
+        return $this->view->render($res, 'articles/liste.twig', ['titre' => $titre, 'section' => $section]);
     }
 }
