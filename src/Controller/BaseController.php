@@ -48,9 +48,4 @@ class BaseController
             $this->user = User::find($this->auth->getIdentity()['id']);
         }
     }
-
-    public function renderArticles(Response $res, $titre, $section)
-    {
-        return $this->view->render($res, 'articles/liste.twig', ['titre' => $titre, 'section' => $section]);
-    }
 }

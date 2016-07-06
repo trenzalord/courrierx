@@ -27,6 +27,6 @@ class Roman extends Model
      */
     public function romans()
     {
-        return $this->hasMany('Courriex\Model\Chapitre');
+        return $this->hasMany('Courrierx\Model\Chapitre');
     }
 }

@@ -18,7 +18,7 @@ class User extends Model
      */
     public function articles()
     {
-        return $this->hasMany('Courriex\Model\Article', 'auteur_id');
+        return $this->hasMany('Courrierx\Model\Article', 'auteur_id');
     }
 
     /**
@@ -26,7 +26,7 @@ class User extends Model
      */
     public function notes()
     {
-        return $this->hasMany('Courriex\Model\Note', 'auteur_id');
+        return $this->hasMany('Courrierx\Model\Note', 'auteur_id');
     }
 
     /**
@@ -34,7 +34,7 @@ class User extends Model
      */
     public function commentaires()
     {
-        return $this->hasMany('Courriex\Model\Commentaire', 'auteur_id');
+        return $this->hasMany('Courrierx\Model\Commentaire', 'auteur_id');
     }
 
     /**
@@ -42,7 +42,7 @@ class User extends Model
      */
     public function nouvelles()
     {
-        return $this->hasMany('Courriex\Model\Nouvelle', 'auteur_id');
+        return $this->hasMany('Courrierx\Model\Nouvelle', 'auteur_id');
     }
 
     /**
@@ -50,7 +50,7 @@ class User extends Model
      */
     public function romans()
     {
-        return $this->hasMany('Courriex\Model\Roman', 'auteur_id');
+        return $this->hasMany('Courrierx\Model\Roman', 'auteur_id');
     }
 
     public function isPlayer()

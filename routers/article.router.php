@@ -12,6 +12,8 @@ $app->group('/articles', function () {
         $this->get('/editer', '\Courrierx\Controller\ArticleController:getEdit');
         $this->post('/editer', '\Courrierx\Controller\ArticleController:patchArticle');
     });
-    $this->get('/nouveau[/{categorie:[A-Z]{3}}]', '\Courrierx\Controller\ArticleController:getNew');
+    $this->get('/nouveau[/{categorie:[A-Z]{3}}]',
+        '\Courrierx\Controller\ArticleController:getNew')->setname('newArticle');
     $this->post('/nouveau[/{categorie:[A-Z]{3}}]', '\Courrierx\Controller\ArticleController:postArticle');
+    $this->get('/{categorie:[A-Z]{3}}', '\Courrierx\Controller\ArticleController:renderArticles')->setName('articles');
 });

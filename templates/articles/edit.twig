@@ -9,6 +9,12 @@
 {%  block content %}
     <h2>{% if edit %}Editer {{ article.titre }}{% else %}Nouvel article{% endif %}</h2>
     <hr>
+    {% block successFlash %}
+        {{ parent() }}
+    {% endblock %}
+    {% block errorFlash %}
+        {{ parent() }}
+    {% endblock %}
     <form method="post" action="">
         <div class="form-group">
             <label class="control-label" for="inputTitre">Titre</label>
@@ -16,7 +22,7 @@
         </div>
         <div class="form-group">
             <label class="control-label" for="selCategorie">Categorie</label>
-            <select id="selCategorie" class="form-control">
+            <select id="selCategorie" class="form-control" name="categorie">
                 <option value="ATR" {% if categorie == "ATR" %}selected="selected"{% endif %}>Autre</option>
                 <option value="IMG" {% if categorie == "IMG" %}selected="selected"{% endif %}>Image</option>
                 <option value="VID" {% if categorie == "VID" %}selected="selected"{% endif %}>Vidéo</option>
@@ -39,5 +45,8 @@
             <label class="control-label" for="inputContenu">Contenu</label>
             <textarea id="inputContenu" class="form-control" name="contenu" required>{{ article.contenu }}</textarea>
         </div>
+        <input type="hidden" name="{{ csrfNameKey }}" value="{{ csrfName }}" />
+        <input type="hidden" name="{{ csrfValueKey }}" value="{{ csrfValue }}" />
+        <button id="submitButton" class="btn btn-success pull-right" type="submit">{% if edit %}Sauvegarder{% else %}Publier{% endif %}</button>
     </form>
 {% endblock %}

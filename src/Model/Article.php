@@ -26,7 +26,7 @@ class Article extends Model
      */
     public function notes()
     {
-        return $this->hasMany('Courriex\Model\Note');
+        return $this->hasMany('Courrierx\Model\Note');
     }
 
     /**
@@ -34,6 +34,6 @@ class Article extends Model
      */
     public function commentaires()
     {
-        return $this->hasMany('Courriex\Model\Commentaire');
+        return $this->hasMany('Courrierx\Model\Commentaire');
     }
 }

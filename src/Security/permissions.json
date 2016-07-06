@@ -34,48 +34,13 @@
           }
         }
       },
-      "recit/": {
-        "routes": {
-          "romans": {
-            "allow": { "role": "guest", "method": ["GET"] }
-          },
-          "nouvelles": {
-            "allow": { "role": "guest", "method": ["GET"] }
-          },
-          "images": {
-            "allow": { "role": "guest", "method": ["GET"] }
-          },
-          "videos": {
-            "allow": { "role": "guest", "method": ["GET"] }
-          },
-          "audios": {
-            "allow": { "role": "guest", "method": ["GET"] }
-          }
-        }
-      },
-      "univers/": {
-        "routes": {
-          "geographie": {
-            "allow": { "role": "guest", "method": ["GET"] }
-          },
-          "histoire-economie": {
-            "allow": { "role": "guest", "method": ["GET"] }
-          },
-          "politique-societe": {
-            "allow": { "role": "guest", "method": ["GET"] }
-          },
-          "religion": {
-            "allow": { "role": "guest", "method": ["GET"] }
-          },
-          "technologie-science": {
-            "allow": { "role": "guest", "method": ["GET"] }
-          }
-        }
-      },
       "articles/": {
         "routes": {
           "nouveau[/{categorie:[A-Z]{3}}]": {
             "allow": { "role": "journalist", "method": ["GET", "POST"] }
+          },
+          "{categorie:[A-Z]{3}}": {
+            "allow": { "role": "guest", "method": ["GET"] }
           },
           "{id:[0-9]+}": {
             "allow": { "role": "guest", "method": ["GET"] },

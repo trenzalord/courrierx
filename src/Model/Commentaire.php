@@ -35,7 +35,7 @@ class Commentaire extends Model
      */
     public function reponses()
     {
-        return $this->hasMany('Courriex\Model\Commentaire', 'rep_commentaire_id');
+        return $this->hasMany('Courrierx\Model\Commentaire', 'rep_commentaire_id');
     }
 
     /**
@@ -43,6 +43,6 @@ class Commentaire extends Model
      */
     public function commentaireOriginal()
     {
-        return $this->belongsTo('Courriex\Model\Commentaire', 'rep_commentaire_id');
+        return $this->belongsTo('Courrierx\Model\Commentaire', 'rep_commentaire_id');
     }
 }
